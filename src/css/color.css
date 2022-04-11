@@ -1,0 +1,40 @@
+:root {
+  --primary: #3d89f3;
+  --secondary: #f40bd5;
+  --light: #f9f9f9;
+  --dark: #150e0b;
+  --light-gray: rgb(240, 238, 238);
+  --gray: rgb(219, 219, 219);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+.bg-light {
+  background-color: var(--light);
+}
+
+.bg-dark {
+  background-color: var(--dark);
+}
+
+.bg-light-gray {
+  background-color: var(--light-gray);
+}
+
+.bg-gray {
+  background-color: var(--gray);
+}
+
+.text-light {
+  color: var(--light);
+}
+
+.text-dark {
+  color: var(--dark);
+}

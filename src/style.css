@@ -1,0 +1,22 @@
+@import url(./css/color.css);
+@import url(./css/flex.css);
+@import url(./css/space.css);
+
+@font-face {
+  font-family: Rubik;
+  src: url("./assets/rubik.ttf");
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: Rubik;
+  margin: 0;;
+  box-sizing: border-box;
+  font-family: Rubik;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}

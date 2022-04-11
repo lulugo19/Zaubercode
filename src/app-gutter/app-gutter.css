@@ -1,0 +1,34 @@
+
+
+.gutter {
+  --gutter-size: 2px;
+  --handle-width: 20px;
+  --handle-height: 5px;
+  transition: background-color 0.2s;
+}
+
+.gutter.handle-drag {
+  background-color: var(--primary);
+}
+
+.handle {
+  flex: var(--handle-width);
+  flex-grow: 0;
+  transition: background-color 0.25s;
+  border-radius: 1px;
+  z-index: 10;
+}
+
+.handle:hover, .handle.handle-drag {
+  background-color: var(--primary);
+}
+
+.handle-vertical {
+  height: var(--handle-height);
+  cursor: row-resize;
+}
+
+.handle-horizontal {
+  width: var(--handle-height);
+  cursor: col-resize;
+}
