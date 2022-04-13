@@ -1,0 +1,34 @@
+/* width */
+app-zaubercode ::-webkit-scrollbar {
+  width: 10px;
+}
+/* button */
+app-zaubercode ::-webkit-scrollbar-button {
+  background: transparent;
+}
+/* Handle */
+app-zaubercode ::-webkit-scrollbar-thumb {
+  background: var(--gray);
+  border-radius: 5px;
+}
+/* Handle on hover */
+app-zaubercode ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+/* Track */
+app-zaubercode ::-webkit-scrollbar-track {
+  background: var(--light);
+}
+/* The track NOT covered by the handle. */
+::-webkit-scrollbar-track-piece {
+  background: var(--light-gray);
+  border-radius: 5px;
+}
+/* Corner */
+app-zaubercode ::-webkit-scrollbar-corner {
+  background: #999;
+}
+/* Resizer */
+app-zaubercode ::-webkit-resizer {
+  background: #111;
+}

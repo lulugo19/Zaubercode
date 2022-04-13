@@ -1,4 +1,10 @@
-import * as style from "./style.css";
 import AppZaubercode from "./app-zaubercode";
+import BlockSelector from "./components/block-selector";
 
-document.body.appendChild(new AppZaubercode());
+if (!customElements.get("app-zaubercode")) {
+  customElements.define("app-zaubercode", AppZaubercode);
+}
+
+if (!customElements.get("block-selector")) {
+  customElements.define("block-selector", BlockSelector);
+}

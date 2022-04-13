@@ -1,0 +1,19 @@
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
