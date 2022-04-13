@@ -1,7 +1,7 @@
 import Split from "./third-party/splitjs";
 import createAppGutterOptions from "./app-gutter/createAppGutterOptions";
 import Icon from "./assets/icon.png";
-import BlockSelector from "./components/block-selector";
+import BlockSelector from "./components/block-selector/block-selector";
 
 export default class AppZaubercode extends HTMLElement {
   columns: Split.Instance;
@@ -9,7 +9,7 @@ export default class AppZaubercode extends HTMLElement {
   column2: Split.Instance;
   column3: Split.Instance;
 
-  primaryBlocksSelector: BlockSelector;
+  basicElementsSelector: BlockSelector;
   customBlocksSelector: BlockSelector;
 
   constructor() {
@@ -26,8 +26,8 @@ export default class AppZaubercode extends HTMLElement {
     </nav>
     <div class="flex row w-full" style="height: calc(100% - 40px)">
       <div id="mainCol1" class="flex col h-full">
-        <block-selector id="primaryBlocksSelector"></block-selector>
-        <block-selector id="customBlocksSelector"></block-selector>
+        <block-selector id="basicElementsSelector" heading="Basis Blöcke"></block-selector>
+        <block-selector id="customBlocksSelector" heading="Eigene Blöcke"></block-selector>
       </div>
       <div id="mainCol2" class="flex col h-full">
         <div id="worldEditor"></div>
@@ -40,7 +40,7 @@ export default class AppZaubercode extends HTMLElement {
     </div>
     </div>`;
 
-    this.primaryBlocksSelector = this.querySelector("#primaryBlocksSelector");
+    this.basicElementsSelector = this.querySelector("#basicElementsSelector");
     this.customBlocksSelector = this.querySelector("#customBlocksSelector");
 
     this.columns = Split(["#mainCol1", "#mainCol2", "#mainCol3"], {
@@ -50,7 +50,7 @@ export default class AppZaubercode extends HTMLElement {
       ...createAppGutterOptions("main-split", [12.5, 50, 37.5]),
     });
 
-    this.column1 = Split(["#primaryBlocksSelector", "#customBlocksSelector"], {
+    this.column1 = Split(["#basicElementsSelector", "#customBlocksSelector"], {
       sizes: [50, 50],
       minSize: [200, 200],
       direction: "vertical",
