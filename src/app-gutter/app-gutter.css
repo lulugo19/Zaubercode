@@ -5,15 +5,28 @@
   --handle-width: 20px;
   --handle-height: 5px;
   transition: background-color 0.2s;
+  position: relative;
 }
 
-.gutter.handle-drag {
+.gutter-fill {
+  position: absolute;
+  height: 0%;
+  width: 0%;
   background-color: var(--primary);
+  z-index: 200;
+  transition: width 0.2s, height 0.2s;
+}
+
+.gutter-fill.handle-drag {
+  width: 100%;
+  height: 100%;
 }
 
 .handle {
-  flex: var(--handle-width);
-  flex-grow: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   transition: background-color 0.25s;
   border-radius: 1px;
   z-index: 200;
@@ -24,11 +37,11 @@
 }
 
 .handle-vertical {
+  width: var(--handle-width);
   height: var(--handle-height);
-  cursor: row-resize;
 }
 
 .handle-horizontal {
   width: var(--handle-height);
-  cursor: col-resize;
+  height: var(--handle-width);
 }

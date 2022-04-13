@@ -18,13 +18,13 @@ export default class AppZaubercode extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = `
-    <div class="container flex col h-full w-full overflow-hidden bg-light">
-    <nav class="flex w-full text-light p1 bg-primary">
+    <div class="flex col h-full w-full overflow-hidden bg-light">
+    <nav class="flex flex-0 row w-full text-light p1 bg-primary" style="height: 40px">
       <img src="${Icon}" style="width: 30px; height: 30px; margin-right: 10px;" title="Wizard Icon created by Freepik"></img>
       <h2>Zaubercode</h2>
       <!--<a href="https://www.flaticon.com/free-icons/wizard" title="wizard icons">Wizard icons created by Freepik - Flaticon</a>-->
     </nav>
-    <div class="flex grow">
+    <div class="flex row w-full" style="height: calc(100% - 40px)">
       <div id="mainCol1" class="flex col h-full">
         <block-selector id="primaryBlocksSelector"></block-selector>
         <block-selector id="customBlocksSelector"></block-selector>
@@ -33,62 +33,42 @@ export default class AppZaubercode extends HTMLElement {
         <div id="worldEditor"></div>
         <div id="blockExplorer"></div>
       </div>
-      <div id="mainCol3" class="flex col f-full">
-        <div id="primaryBlocksExplorer"></div>
-        <div id="customBlocksExplorer"></div>
+      <div id="mainCol3" class="flex col h-full">
+        <div id="actionCodeEditor"></div>
+        <div id="eventCodeEditor"></div>
       </div>
     </div>
     </div>`;
 
     this.primaryBlocksSelector = this.querySelector("#primaryBlocksSelector");
     this.customBlocksSelector = this.querySelector("#customBlocksSelector");
-    const gutterOptions = createAppGutterOptions(2, 30, 5);
 
     this.columns = Split(["#mainCol1", "#mainCol2", "#mainCol3"], {
-      sizes: [12.5, 50, 37.5],
       minSize: [100, 500, 300],
       maxSize: [400, Infinity, Infinity],
       direction: "horizontal",
-      ...gutterOptions,
-      onDrag: (sizes, gutter) => {
-        console.log(sizes);
-        this.primaryBlocksSelector.updateSize(
-          (sizes[0] / 100) * this.getBoundingClientRect().width
-        );
-        this.customBlocksSelector.updateSize((sizes[0] / 100) * this.getBoundingClientRect().width);
-      },
+      ...createAppGutterOptions("main-split", [12.5, 50, 37.5]),
     });
-
-    this.primaryBlocksSelector.setAttribute(
-      "size",
-      (this.columns.getSizes()[0] / 100) * this.getBoundingClientRect().width + "px"
-    );
-    this.customBlocksSelector.setAttribute(
-      "size",
-      (this.columns.getSizes()[0] / 100) * this.getBoundingClientRect().width + "px"
-    );
-
-    console.log(this.primaryBlocksSelector);
 
     this.column1 = Split(["#primaryBlocksSelector", "#customBlocksSelector"], {
       sizes: [50, 50],
       minSize: [200, 200],
       direction: "vertical",
-      ...gutterOptions,
+      ...createAppGutterOptions("block-selector", [50, 50]),
     });
 
     this.column2 = Split(["#worldEditor", "#blockExplorer"], {
       sizes: [50, 50],
       minSize: [200, 200],
       direction: "vertical",
-      ...gutterOptions,
+      ...createAppGutterOptions("world-editor", [50, 50]),
     });
 
-    this.column3 = Split(["#primaryBlocksExplorer", "#customBlocksExplorer"], {
+    this.column3 = Split(["#actionCodeEditor", "#eventCodeEditor"], {
       sizes: [50, 50],
       minSize: [200, 200],
       direction: "vertical",
-      ...gutterOptions,
+      ...createAppGutterOptions("code-editors", [50, 50]),
     });
   }
 }

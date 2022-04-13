@@ -2,12 +2,22 @@ import Split from "../third-party/splitjs";
 import appGutterStyle from "./app-gutter.css";
 
 export default function createGutterOptions(
-  gutterSize: number,
-  handleWidth: number,
-  handleHeigth: number
+  id: string,
+  defaultSizes: number[],
+  gutterSize: number = 2,
+  handleWidth: number = 30,
+  handleHeigth: number = 5
 ): Split.Options {
+  const localStorageId = `split-sizes-${id}`;
   const style = appGutterStyle;
+  let splitSizes: string | number[] = localStorage.getItem(localStorageId);
+  if (splitSizes) {
+    splitSizes = JSON.parse(splitSizes);
+  } else {
+    splitSizes = defaultSizes;
+  }
   return {
+    sizes: splitSizes as number[],
     gutterSize: gutterSize,
     gutter: (index, direction) => {
       const gutterElement = document.createElement("div");
@@ -16,10 +26,8 @@ export default function createGutterOptions(
       gutterElement.style.setProperty("--handle-width", `${handleWidth}px`);
       gutterElement.style.setProperty("--handle-height", `${handleHeigth}px`);
       gutterElement.innerHTML = `
-        <style>
-
-        </style>
         <div class="handle handle-${direction} bg-gray"></div>
+        <div class="gutter-fill"></div>
       `;
 
       if (direction === "horizontal") {
@@ -32,13 +40,14 @@ export default function createGutterOptions(
     },
 
     onDragStart: (sizes, gutter) => {
-      const handle = gutter.querySelector(".handle, .gutter-drag-fill");
-      [handle, gutter].forEach(el => el.classList.add("handle-drag"));
+      const elements = gutter.querySelectorAll(".handle, .gutter-fill");
+      elements.forEach(el => el.classList.add("handle-drag"));
     },
 
     onDragEnd: (sizes, gutter) => {
-      const handle = gutter.querySelector(".handle, .gutter-drag-fill");
-      [handle, gutter].forEach(el => el.classList.remove("handle-drag"));
+      localStorage.setItem(localStorageId, JSON.stringify(sizes));
+      const elements = gutter.querySelectorAll(".handle, .gutter-fill");
+      elements.forEach(el => el.classList.remove("handle-drag"));
     },
   };
 }
