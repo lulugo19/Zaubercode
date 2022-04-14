@@ -1,6 +1,6 @@
 import IObject from "./IObject";
 import interact from "interactjs";
-import { HotUpdateChunk } from "webpack";
+import blockSelectedStyle from "./block-selected.css";
 
 export default abstract class BasicBlock extends HTMLElement implements IObject {
   id: string;
@@ -9,6 +9,8 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
 
   x: number;
   y: number;
+
+  static blockSelectedStyle: string = blockSelectedStyle;
 
   connectedCallback() {
     this.id = this.getAttribute("id");
@@ -22,20 +24,12 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
   }
 
   configureInteraction() {
+    const select = this.select.bind(this);
+    this.addEventListener("mousedown", select);
+
     interact(this).draggable({
-      // enable inertial throwing
-      inertia: {
-        minSpeed: 300,
-        endSpeed: 1000,
-      },
       // keep the element within the area of it's parent
       modifiers: [],
-      // enable autoScroll
-      autoScroll: {
-        enabled: true,
-        speed: 1000,
-        container: document.querySelector("#world") as HTMLElement,
-      },
 
       listeners: {
         // call this function on every dragmove event
@@ -44,10 +38,17 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
     });
   }
 
+  select(event: any) {
+    const currentSelected = this.parentElement.querySelector(".block-selected") as HTMLElement;
+    if (currentSelected) {
+      currentSelected.classList.remove("block-selected");
+    }
+    this.classList.add("block-selected");
+  }
+
   onDragMove(event: any) {
     this.x += event.delta.x;
     this.y += event.delta.y;
-    console.log(this.x, this.y);
     this.updatePosition();
   }
 

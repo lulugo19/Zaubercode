@@ -1,0 +1,4 @@
+.block-selected {
+  border: 3px solid var(--secondary);
+  border-radius: 4px;
+}
