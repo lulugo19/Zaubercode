@@ -30,7 +30,7 @@ export default class AppZaubercode extends HTMLElement {
         <block-selector id="customBlocksSelector" heading="Eigene Blöcke"></block-selector>
       </div>
       <div id="mainCol2" class="flex col h-full">
-        <div id="worldEditor"></div>
+        <world-editor id="worldEditor"></world-editor>
         <div id="blockExplorer"></div>
       </div>
       <div id="mainCol3" class="flex col h-full">

@@ -1,5 +1,5 @@
-import picturePreviewImg from "./palette.svg";
-import soundPreviewImg from "./speaker.svg";
+import picturePreviewImg from "../../assets/graphics/palette.svg";
+import soundPreviewImg from "../../assets/graphics/speaker.svg";
 
 interface BasicBlockPreview {
   name: string;

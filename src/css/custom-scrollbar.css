@@ -1,6 +1,7 @@
 /* width */
 app-zaubercode ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 /* button */
 app-zaubercode ::-webkit-scrollbar-button {
