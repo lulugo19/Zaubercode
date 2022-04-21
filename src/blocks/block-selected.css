@@ -1,4 +1,65 @@
+.block {
+  position: absolute;
+  padding: 5px;
+  border:  4px solid transparent;
+}
+
 .block-selected {
-  border: 3px solid var(--secondary);
+  border: 4px solid var(--secondary);
   border-radius: 4px;
 }
+
+.block-moving {
+  cursor: move;
+}
+
+.block-rotation-handle {
+  position: absolute;
+}
+
+.block-rotation-handle {
+  height: 30px;
+  width: 4px;
+  position: absolute;
+  top: -30px;
+  left: calc(50% - 2px);
+  background-color: var(--secondary);
+  display: none;
+}
+
+.block-rotation-knob {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary);
+  cursor: url("./rotate-cursor.png") 12.5 12.5, auto;
+  display: none;
+}
+
+.block-selected .block-rotation-handle{
+  display: block;
+}
+
+.block-selected .block-rotation-knob {
+  display: block;
+}
+
+.block-scale-knob {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(75%, 75%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary);
+  display: none;
+}
+
+.block-selected .block-scale-knob {
+  display: block;
+}
+
