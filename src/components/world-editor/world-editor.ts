@@ -1,6 +1,11 @@
+import interact from "interactjs";
 import Picture from "../../blocks/basic-block-picture";
+import World from "./World";
 
 export default class WorldEditor extends HTMLElement {
+  world: World;
+  scale: number = 1;
+
   connectedCallback() {
     this.innerHTML = `
       <style>
@@ -17,15 +22,42 @@ export default class WorldEditor extends HTMLElement {
       </div>
     `;
 
-    const world = this.querySelector("#world") as HTMLDivElement;
-    const basicBlockPicture = document.createElement("basic-block-picture");
-    basicBlockPicture.setAttribute("id", "picture");
-    basicBlockPicture.setAttribute("x", "0");
-    basicBlockPicture.setAttribute("y", "0");
-    world.appendChild(basicBlockPicture);
+    const worldContainer = this.querySelector("#world") as HTMLDivElement;
+    this.world = new World(worldContainer);
 
-    world.addEventListener("scroll", event => {
-      world.style.backgroundPosition = `-${world.scrollLeft}px -${world.scrollTop}px`;
+    interact(worldContainer).dropzone({
+      accept: "block-preview",
+      ondrop: e => {
+        //
+        console.log(e);
+        const rect = this.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        let x = e.dragEvent.client.x - centerX;
+        let y = centerY - e.dragEvent.client.y;
+
+        console.log(e);
+        const basicBlockPicture = document.createElement(e.relatedTarget.tag);
+        basicBlockPicture.setAttribute("id", "picture");
+        basicBlockPicture.setAttribute("x", x.toString());
+        basicBlockPicture.setAttribute("y", y.toString());
+
+        this.world.addBlock(basicBlockPicture);
+      },
+    });
+
+    worldContainer.addEventListener("wheel", e => {
+      e.preventDefault();
+      this.scale += e.deltaY * -0.0025;
+      this.scale = Math.max(0.01, this.scale);
+      for (const block of this.world.blocks) {
+        block.scale = this.scale;
+      }
+    });
+
+    worldContainer.addEventListener("scroll", event => {
+      worldContainer.style.backgroundPosition = `-${worldContainer.scrollLeft}px -${worldContainer.scrollTop}px`;
     });
   }
 }

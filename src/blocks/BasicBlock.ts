@@ -12,6 +12,8 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
   rotation: number;
   size: number;
 
+  private _scale: number;
+
   static blockSelectedStyle: string = blockSelectedStyle;
 
   get width() {
@@ -30,12 +32,22 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
     this.style.height = `${Math.round(height)}px`;
   }
 
+  get scale() {
+    return this._scale;
+  }
+
+  set scale(s: number) {
+    this._scale = s;
+    this.updateTransform();
+  }
+
   connectedCallback() {
     this.id = this.getAttribute("id");
     this.x = Number(this.getAttribute("x"));
     this.y = Number(this.getAttribute("y"));
     this.rotation = Number(this.getAttribute("rotation")) || 0;
     this.size = 1;
+    this.scale = 1;
     this.style.position = "absolute";
     this.style.left = "50%";
     this.style.top = "50%";
@@ -157,8 +169,8 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
   }
 
   updateTransform() {
-    this.style.left = `calc(50% + ${this.x}px)`;
-    this.style.top = `calc(50% - ${this.y}px)`;
-    this.style.transform = ` translate(-50%, -50%)rotate(${this.rotation}deg)`;
+    this.style.left = `calc(50% + ${Math.round(this.x * this._scale)}px)`;
+    this.style.top = `calc(50% - ${Math.round(this.y * this._scale)}px)`;
+    this.style.transform = `translate(-50%, -50%) rotate(${this.rotation}deg) scale(${this._scale})`;
   }
 }
