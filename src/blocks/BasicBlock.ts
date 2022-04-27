@@ -1,6 +1,7 @@
 import IObject from "./IObject";
 import interact from "interactjs";
 import blockSelectedStyle from "./block-selected.css";
+import World from "../components/world-editor/World";
 
 export default abstract class BasicBlock extends HTMLElement implements IObject {
   id: string;
@@ -12,7 +13,11 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
   rotation: number;
   size: number;
 
-  private _scale: number;
+  world: World;
+
+  private _scale: number = 1;
+  private _camTranslateX: number = 0;
+  private _camTranslateY: number = 0;
 
   static blockSelectedStyle: string = blockSelectedStyle;
 
@@ -38,6 +43,24 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
 
   set scale(s: number) {
     this._scale = s;
+    this.updateTransform();
+  }
+
+  get camTranslateX() {
+    return this._camTranslateX;
+  }
+
+  set camTranslateX(camX: number) {
+    this._camTranslateX = camX;
+    this.updateTransform();
+  }
+
+  get camTranslateY() {
+    return this._camTranslateY;
+  }
+
+  set camTranslateY(camY: number) {
+    this._camTranslateY = camY;
     this.updateTransform();
   }
 
@@ -71,9 +94,10 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
           this.classList.add("block-moving");
         },
         move: e => {
-          this.x += e.delta.x;
-          this.y -= e.delta.y;
+          this.x += e.delta.x / this._scale;
+          this.y -= e.delta.y / this._scale;
           this.updateTransform();
+          this.world.camera.keepInBounds(this);
         },
         end: e => {
           this.classList.remove("block-moving");
@@ -171,6 +195,10 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
   updateTransform() {
     this.style.left = `calc(50% + ${Math.round(this.x * this._scale)}px)`;
     this.style.top = `calc(50% - ${Math.round(this.y * this._scale)}px)`;
-    this.style.transform = `translate(-50%, -50%) rotate(${this.rotation}deg) scale(${this._scale})`;
+    this.style.transform = `translate(calc(-50% + ${this._camTranslateX}px), calc(-50% - ${this._camTranslateY}px)) rotate(${this.rotation}deg) scale(${this._scale})`;
+  }
+
+  delete() {
+    this.remove();
   }
 }

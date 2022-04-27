@@ -1,7 +1,9 @@
 import BasicBlock from "../../blocks/BasicBlock";
+import Camera from "./Camera";
 
 export default class World {
   container: HTMLElement;
+  camera: Camera;
   blocks: BasicBlock[] = [];
 
   constructor(container: HTMLElement) {
@@ -10,6 +12,7 @@ export default class World {
 
   addBlock(block: BasicBlock) {
     this.blocks.push(block);
+    block.world = this;
     this.container.appendChild(block);
   }
 

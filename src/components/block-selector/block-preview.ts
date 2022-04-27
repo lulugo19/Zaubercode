@@ -17,6 +17,7 @@ export default class BlockPreview extends HTMLElement {
         border-radius: 10px;
         text-align: center;
         margin-top: 1em;
+        user-select: none;
       }
     </style>
     <img src="${img}" style="width: 100%; height: 60px; aspect-ratio: 1/1;">

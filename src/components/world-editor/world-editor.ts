@@ -1,10 +1,11 @@
 import interact from "interactjs";
 import Picture from "../../blocks/basic-block-picture";
+import Camera from "./Camera";
 import World from "./World";
 
 export default class WorldEditor extends HTMLElement {
   world: World;
-  scale: number = 1;
+  camera: Camera;
 
   connectedCallback() {
     this.innerHTML = `
@@ -15,6 +16,7 @@ export default class WorldEditor extends HTMLElement {
           repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
           background-position: 0px 0px;
           background-size: 71px 71px;
+          overflow: hidden;
         }
       </style>
       <div id="world" class="position-relative h-full w-full overflow-auto">
@@ -24,6 +26,7 @@ export default class WorldEditor extends HTMLElement {
 
     const worldContainer = this.querySelector("#world") as HTMLDivElement;
     this.world = new World(worldContainer);
+    this.camera = new Camera(this.world);
 
     interact(worldContainer).dropzone({
       accept: "block-preview",
@@ -47,17 +50,13 @@ export default class WorldEditor extends HTMLElement {
       },
     });
 
-    worldContainer.addEventListener("wheel", e => {
-      e.preventDefault();
-      this.scale += e.deltaY * -0.0025;
-      this.scale = Math.max(0.01, this.scale);
-      for (const block of this.world.blocks) {
-        block.scale = this.scale;
+    document.addEventListener("keydown", e => {
+      if (e.key === "Delete") {
+        const selected = worldContainer.querySelector(".block-selected");
+        if (selected) {
+          selected.remove();
+        }
       }
-    });
-
-    worldContainer.addEventListener("scroll", event => {
-      worldContainer.style.backgroundPosition = `-${worldContainer.scrollLeft}px -${worldContainer.scrollTop}px`;
     });
   }
 }

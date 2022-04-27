@@ -2,6 +2,7 @@
   position: absolute;
   padding: 5px;
   border:  4px solid transparent;
+  user-select: none;
 }
 
 .block-selected {
