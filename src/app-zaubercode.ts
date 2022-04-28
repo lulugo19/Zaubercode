@@ -31,7 +31,7 @@ export default class AppZaubercode extends HTMLElement {
       </div>
       <div id="mainCol2" class="flex col h-full">
         <world-editor id="worldEditor"></world-editor>
-        <div id="blockExplorer"></div>
+        <block-explorer id="blockExplorer"></block-explorer>
       </div>
       <div id="mainCol3" class="flex col h-full">
         <div id="actionCodeEditor"></div>

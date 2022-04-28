@@ -4,7 +4,7 @@ import World from "./World";
 export default class Camera {
   x: number = 0;
   y: number = 0;
-  zoom: number = 0;
+  zoom: number = 1;
   world: World;
 
   private middleMouseButtonPressed: boolean = false;
@@ -51,30 +51,40 @@ export default class Camera {
         this.translateBlocks();
       }
     });
+  }
 
-    worldContainer.addEventListener("scroll", event => {
-      worldContainer.style.backgroundPosition = `-${worldContainer.scrollLeft}px -${worldContainer.scrollTop}px`;
-    });
+  move(mx: number, my: number) {
+    if (mx === 0 && my === 0) {
+      return;
+    }
+    this.x += mx;
+    this.y += my;
+    this.translateBlocks();
+    this.adjustGrid();
   }
 
   keepInBounds(block: BasicBlock) {
     const bbb = block.getBoundingClientRect();
     const cbb = this.world.container.getBoundingClientRect();
 
+    let mx = 0,
+      my = 0;
     if (bbb.left <= cbb.left) {
-      this.x += cbb.left - bbb.left;
-    }
-    if (bbb.right >= cbb.right) {
-      this.x += cbb.right - bbb.right;
+      mx = cbb.left - bbb.left;
+    } else if (bbb.right >= cbb.right) {
+      mx = cbb.right - bbb.right;
     }
     if (bbb.top <= cbb.top) {
-      this.y += bbb.top - cbb.top;
+      my = bbb.top - cbb.top;
+    } else if (bbb.bottom >= cbb.bottom) {
+      my = bbb.bottom - cbb.bottom;
     }
-    if (bbb.bottom >= cbb.bottom) {
-      this.y += bbb.bottom - cbb.bottom;
-    }
+    this.move(mx, my);
+  }
 
-    this.translateBlocks();
+  private adjustGrid() {
+    const container = this.world.container;
+    container.style.backgroundPosition = `${this.x}px ${-this.y}px`;
   }
 
   private translateBlocks() {

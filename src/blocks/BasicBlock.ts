@@ -2,6 +2,7 @@ import IObject from "./IObject";
 import interact from "interactjs";
 import blockSelectedStyle from "./block-selected.css";
 import World from "../components/world-editor/World";
+import eventBus, { BlockSelectedEventDetail, CustomEvents } from "../EventBus";
 
 export default abstract class BasicBlock extends HTMLElement implements IObject {
   id: string;
@@ -10,16 +11,27 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
 
   x: number;
   y: number;
-  rotation: number;
   size: number;
 
   world: World;
 
+  private _rotation: number = 0;
   private _scale: number = 1;
   private _camTranslateX: number = 0;
   private _camTranslateY: number = 0;
 
   static blockSelectedStyle: string = blockSelectedStyle;
+
+  get rotation(): number {
+    return this._rotation;
+  }
+
+  set rotation(rotation: number) {
+    if (rotation < 0) {
+      rotation += 360;
+    }
+    this._rotation = rotation;
+  }
 
   get width() {
     return parseInt(this.style.width);
@@ -83,7 +95,10 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
 
   configureInteraction() {
     const select = this.select.bind(this);
-    this.addEventListener("mousedown", select);
+    this.addEventListener("mousedown", () => {
+      eventBus.dispatchEvent(CustomEvents.BLOCK_SELECTED, { selectedBlock: this });
+    });
+    eventBus.addEventListener(CustomEvents.BLOCK_SELECTED, select);
 
     interact(this).draggable({
       // keep the element within the area of it's parent
@@ -184,18 +199,24 @@ export default abstract class BasicBlock extends HTMLElement implements IObject 
     });
   }
 
-  select(event: any) {
-    const currentSelected = this.parentElement.querySelector(".block-selected") as HTMLElement;
-    if (currentSelected) {
-      currentSelected.classList.remove("block-selected");
+  select(event: CustomEvent) {
+    const block = (event.detail as BlockSelectedEventDetail).selectedBlock;
+    if (block === this) {
+      this.classList.add("block-selected");
+    } else {
+      this.classList.remove("block-selected");
     }
-    this.classList.add("block-selected");
   }
 
   updateTransform() {
     this.style.left = `calc(50% + ${Math.round(this.x * this._scale)}px)`;
     this.style.top = `calc(50% - ${Math.round(this.y * this._scale)}px)`;
     this.style.transform = `translate(calc(-50% + ${this._camTranslateX}px), calc(-50% - ${this._camTranslateY}px)) rotate(${this.rotation}deg) scale(${this._scale})`;
+    this.dispatchEvent(
+      new CustomEvent("transformchanged", {
+        detail: { size: this.size, rotation: this.rotation, x: this.x, y: this.y },
+      })
+    );
   }
 
   delete() {
